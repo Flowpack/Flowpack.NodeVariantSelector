@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file original="" product-name="Flowpack.NodeVariantSelector" source-language="en" datatype="plaintext">
+        <body>
+            <trans-unit id="tooltip" xml:space="preserve">
+                <source>Use the dropdown to switch to other variants of the selected node</source>
+            </trans-unit>
+            <trans-unit id="matchingTooltip" xml:space="preserve">
+                <source>The node dimensions of the selected node match the active dimension configuration, you may edit the node in place freely</source>
+            </trans-unit>
+            <trans-unit id="shinethroughTooltip" xml:space="preserve">
+                <source>The selected node is a shine-through node from another dimension, you may want to switch to its original dimension to edit it there, editing it in-place would create a copy</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>

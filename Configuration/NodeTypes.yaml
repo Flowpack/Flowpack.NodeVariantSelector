@@ -1,0 +1,13 @@
+'Neos.Neos:Node':
+  ui:
+    inspector:
+      groups:
+        nodeVariantSelector:
+          label: 'Node Variants'
+          tab: default
+          position: 0
+      views:
+        nodeVariantSelector:
+          group: nodeVariantSelector
+          view: Flowpack.NodeVariantSelector/Views/NodeVariantSelector
+          position: 0
