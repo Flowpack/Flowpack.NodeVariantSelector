@@ -3,7 +3,7 @@
     <file original="" product-name="Flowpack.NodeVariantSelector" source-language="de" datatype="plaintext">
         <body>
             <trans-unit id="tooltip" xml:space="preserve">
-                <source>Mit dem Dropdown können Sie zu anderen Varianten des ausgewählten Knotens wechseln</source>
+                <source>Mit dem Dropdown können Sie zu anderen Varianten des ausgewählten Knotens wechseln.</source>
             </trans-unit>
             <trans-unit id="matchingTooltip" xml:space="preserve">
                 <source>Die Dimensionen des ausgewählten Nodes entsprechen der aktiven Dimensionskonfiguration, Sie können den Node frei an Ort und Stelle bearbeiten.</source>

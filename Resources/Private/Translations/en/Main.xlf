@@ -3,14 +3,14 @@
     <file original="" product-name="Flowpack.NodeVariantSelector" source-language="en" datatype="plaintext">
         <body>
             <trans-unit id="tooltip" xml:space="preserve">
-                <source>Use the dropdown to switch to other variants of the selected node</source>
+                <source>Use the dropdown to switch to other variants of the selected node.</source>
             </trans-unit>
             <trans-unit id="matchingTooltip" xml:space="preserve">
-                <source>The node dimensions of the selected node match the active dimension configuration, you may edit the node in place freely.</source>
+                <source>The node dimensions of the selected node matches the active dimension configuration, you may edit the node in place freely.</source>
             </trans-unit>
             <trans-unit id="translatingTooltip" xml:space="preserve">
                 <source>The node dimensions of the selected node match the active dimension configuration, you may edit the node in place freely.
-It's possible that this translation node is not recognized in other dimension variants, until you reload the browser.
+It's possible that this translation node is not recognized in other dimension variants until you reload the browser.
 
 The data has been saved successfully and it's safe to just keep working.</source>
             </trans-unit>

@@ -107,10 +107,8 @@ export default class SelectedElement extends PureComponent {
             label: (
                 <div title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:translatingTooltip')}>
                     <Icon icon="sync" padded="right" color="primaryBlue"/>
-                    {Object.keys(uriDimensions).map((dimension) => {
-                        const dimensionName = dimension;
-                        const dimensionValue = uriDimensions[dimension];
-                        const dimensionPresetId = uriDimensions[dimension];
+                    {Object.keys(uriDimensions).map((dimensionName) => {
+                        const dimensionPresetId = uriDimensions[dimensionName];
                         const presetLabel = $get([dimensionName, 'presets', dimensionPresetId, 'label'], contentDimensions);
                         return (
                             <span key={dimensionName} style={{marginRight: 20, fontWeight: 'bold'}}>

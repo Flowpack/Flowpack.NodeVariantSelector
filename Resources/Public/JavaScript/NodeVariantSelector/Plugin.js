@@ -3011,10 +3011,8 @@ var SelectedElement = (_dec = (0, _neosUiDecorators.neos)(function (globalRegist
                     'div',
                     { title: i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:translatingTooltip') },
                     _react2.default.createElement(_reactUiComponents.Icon, { icon: 'sync', padded: 'right', color: 'primaryBlue' }),
-                    Object.keys(uriDimensions).map(function (dimension) {
-                        var dimensionName = dimension;
-                        var dimensionValue = uriDimensions[dimension];
-                        var dimensionPresetId = uriDimensions[dimension];
+                    Object.keys(uriDimensions).map(function (dimensionName) {
+                        var dimensionPresetId = uriDimensions[dimensionName];
                         var presetLabel = (0, _plowJs.$get)([dimensionName, 'presets', dimensionPresetId, 'label'], contentDimensions);
                         return _react2.default.createElement(
                             'span',
