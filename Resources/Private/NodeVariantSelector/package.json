@@ -7,9 +7,12 @@
     "watch": "neos-react-scripts watch"
   },
   "devDependencies": {
-    "@neos-project/neos-ui-extensibility": "^3.1"
+    "@neos-project/build-essentials": "~8.2.0",
+    "@neos-project/neos-ui-extensibility": "~8.2.0",
+    "lodash.isequal": "^4.5.0"
   },
   "neos": {
     "buildTargetDirectory": "../../Public/JavaScript/NodeVariantSelector"
-  }
+  },
+  "dependencies": {}
 }

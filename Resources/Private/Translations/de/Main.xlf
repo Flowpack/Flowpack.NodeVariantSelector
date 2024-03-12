@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xliff version="1.2" xmlns="urn:oasis:names:tc:xliff:document:1.2">
+    <file original="" product-name="Flowpack.NodeVariantSelector" source-language="de" datatype="plaintext">
+        <body>
+            <trans-unit id="tooltip" xml:space="preserve">
+                <source>Mit dem Dropdown können Sie zu anderen Varianten des ausgewählten Knotens wechseln.</source>
+            </trans-unit>
+            <trans-unit id="matchingTooltip" xml:space="preserve">
+                <source>Die Dimensionen des ausgewählten Nodes entsprechen der aktiven Dimensionskonfiguration, Sie können den Node frei an Ort und Stelle bearbeiten.</source>
+            </trans-unit>
+            <trans-unit id="translatingTooltip" xml:space="preserve">
+                <source>Die Dimensionen des ausgewählten Nodes entsprechen der aktiven Dimensionskonfiguration, Sie können den Node frei an Ort und Stelle bearbeiten.
+Es ist möglich, dass dieser Übersetzungs-Node in anderen Dimensionsvarianten nicht erkannt wird, bis Sie den Browser neu laden.
+
+Die Daten wurden erfolgreich gespeichert und es ist sicher, einfach weiterzuarbeiten.</source>
+            </trans-unit>
+            <trans-unit id="shinethroughTooltip" xml:space="preserve">
+                <source>Der ausgewählte Node ist ein Shine-through-Node aus einer anderen Dimension, Sie können in seine ursprüngliche Dimension wechseln, um ihn dort zu bearbeiten, wenn Sie ihn an Ort und Stelle bearbeiten, würde eine Kopie erzeugen.</source>
+            </trans-unit>
+        </body>
+    </file>
+</xliff>
