@@ -1,9 +1,8 @@
 import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
-import {$get} from 'plow-js';
 
-import {Headline, Icon, SelectBox} from '@neos-project/react-ui-components';
+import {Icon, SelectBox} from '@neos-project/react-ui-components';
 
 import I18n from '@neos-project/neos-ui-i18n';
 
@@ -18,7 +17,7 @@ import {neos} from '@neos-project/neos-ui-decorators';
     return {
         focusedNode: selectors.CR.Nodes.focusedSelector(state),
         focusedNodeParentLine: selectors.CR.Nodes.focusedNodeParentLineSelector(state),
-        contentDimensions: $get('cr.contentDimensions.byName', state)
+        contentDimensions: state.cr.contentDimensions.byName
     };
 }, {
     focusNode: actions.CR.Nodes.focus,
@@ -34,46 +33,62 @@ export default class SelectedElement extends PureComponent {
     handleSelectNode = selectedNodeContextPath => {
         const {focusNode, focusedNode} = this.props;
 
-        if (selectedNodeContextPath && selectedNodeContextPath !== $get('contextPath', focusedNode)) {
+        if (selectedNodeContextPath && selectedNodeContextPath !== focusedNode.contextPath) {
             focusNode(selectedNodeContextPath);
         }
     };
 
     createNodeOption = node => {
         const {nodeTypesRegistry} = this.props;
-        const nodeType = $get('nodeType', node);
+        const nodeType = node.nodeType;
 
         return {
-            icon: $get('ui.icon', nodeTypesRegistry.get(nodeType)),
-            label: $get('label', node),
-            value: $get('contextPath', node)
+            icon: nodeTypesRegistry.get(nodeType).ui.icon,
+            label: node.label,
+            value: node.contextPath
         };
     }
 
     render() {
         const {focusedNode, contentDimensions, i18nRegistry} = this.props;
-        const focusedNodeVariants = $get('otherNodeVariants', focusedNode);
+        const focusedNodeVariants = focusedNode.otherNodeVariants;
         if (!focusedNodeVariants) {
             return null;
         }
 
         const currentVariant = {
-            value: $get('dimensions', focusedNode),
+            value: focusedNode?.dimensions,
             label: (
                 <div>
-                    {$get('matchesCurrentDimensions', focusedNode) ? (
-                        <Icon title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:matchingTooltip')} icon="check-circle" padded="right" color="primaryBlue" />
+                    {focusedNode.matchesCurrentDimensions ? (
+                        <Icon
+                            title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:matchingTooltip')}
+                            icon="check-circle"
+                            padded="right"
+                            color="primaryBlue"
+                        />
                     ) : (
-                        <Icon title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:shinethroughTooltip')} icon="exclamation-circle" padded="right" color="warn" />
+                        <Icon
+                            title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:shinethroughTooltip')}
+                            icon="exclamation-circle"
+                            padded="right"
+                            color="warn"
+                        />
                     )}
                     {Object.keys(contentDimensions).map((dimensionName) => {
                         const dimensionValue = contentDimensions[dimensionName];
-                        const dimensionPresetId = $get(['dimensions', dimensionName], focusedNode);
-                        const presetLabel = $get([dimensionName, 'presets', dimensionPresetId, 'label'], contentDimensions);
-                        return (<span key={dimensionName} style={{marginRight: 20, fontWeight: 'bold'}}>
-                            <Icon title={i18nRegistry.translate($get('label', dimensionValue))} icon={$get('icon', dimensionValue)} padded="right" />
-                            <I18n id={presetLabel} />
-                        </span>);
+                        const dimensionPresetId = focusedNode?.dimensions[dimensionName];
+                        const presetLabel = contentDimensions[dimensionName].presets[dimensionPresetId]?.label;
+                        return (
+                            <span key={dimensionName} style={{marginRight: 20, fontWeight: 'bold'}}>
+                                <Icon
+                                    title={i18nRegistry.translate(dimensionValue.label)}
+                                    icon={dimensionValue.icon}
+                                    padded="right"
+                                />
+                                <I18n id={presetLabel} />
+                            </span>
+                        );
                     })}
                 </div>
             )
@@ -85,12 +100,14 @@ export default class SelectedElement extends PureComponent {
                     <div>
                         {Object.keys(contentDimensions).map((dimensionName) => {
                             const dimensionValue = contentDimensions[dimensionName];
-                            const dimensionPresetId = $get(dimensionName, nodeVariant);
-                            const presetLabel = $get([dimensionName, 'presets', dimensionPresetId, 'label'], contentDimensions);
-                            return (<span key={dimensionName} style={{marginRight: 20}}>
-                                <Icon icon={$get('icon', dimensionValue)} padded="right" />
-                                <I18n id={presetLabel} />
-                            </span>);
+                            const dimensionPresetId = nodeVariant[dimensionName];
+                            const presetLabel = dimensionValue.presets[dimensionPresetId]?.label;
+                            return (
+                                <span key={dimensionName} style={{marginRight: 20}}>
+                                    <Icon icon={dimensionValue.icon} padded="right" />
+                                    <I18n id={presetLabel} />
+                                </span>
+                            );
                         })}
                     </div>
                 )
@@ -102,7 +119,7 @@ export default class SelectedElement extends PureComponent {
             <SelectBox
                 id="__neos__nodeVariantsSelector"
                 options={nodeVariantOptions}
-                value={$get([0, 'value'], nodeVariantOptions)}
+                value={nodeVariantOptions[0].value}
                 onValueChange={preset => this.props.selectPreset(preset)}
             />
         );
