@@ -10,3 +10,6 @@ Neos:
         javascript:
           'Flowpack.NodeVariantSelector:NodeVariantSelector':
             resource: resource://Flowpack.NodeVariantSelector/Public/JavaScript/NodeVariantSelector/Plugin.js
+        stylesheets:
+          'Flowpack.NodeVariantSelector:NodeVariantSelector':
+            resource: resource://Flowpack.NodeVariantSelector/Public/JavaScript/NodeVariantSelector/Plugin.css

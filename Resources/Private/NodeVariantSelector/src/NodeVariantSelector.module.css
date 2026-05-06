@@ -1,0 +1,35 @@
+.nvs-variant--shineThrough {
+    position: relative;
+    background-image: repeating-linear-gradient(
+        -45deg,
+        rgba(0, 0, 0, 0),
+        rgba(0, 0, 0, 0) 12px,
+        #323232 0,
+        #323232 23px
+    );
+}
+
+.nvs-variant--shineThrough::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 3px;
+    top: 0;
+    left: 0;
+    background-color: var(--colors-Warn);
+}
+
+.nvs-variant--missing {
+    position: relative;
+    background-color: #323232 !important;
+}
+
+.nvs-variant--missing::after {
+    content: '';
+    position: absolute;
+    height: 100%;
+    width: 3px;
+    top: 0;
+    left: 0;
+    background-color: var(--colors-Error);
+}
