@@ -5,9 +5,9 @@
         nodeVariantSelector:
           label: 'Node Variants'
           tab: default
-          position: 0
+          position: 'start 999'
       views:
         nodeVariantSelector:
           group: nodeVariantSelector
           view: Flowpack.NodeVariantSelector/Views/NodeVariantSelector
-          position: 0
+          position: 'start'
