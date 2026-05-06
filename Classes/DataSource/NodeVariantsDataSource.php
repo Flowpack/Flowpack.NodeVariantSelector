@@ -4,6 +4,8 @@ declare(strict_types=1);
 
 namespace Flowpack\NodeVariantSelector\DataSource;
 
+use Neos\ContentRepository\Core\DimensionSpace\DimensionSpacePoint;
+use Neos\ContentRepository\Core\DimensionSpace\OriginDimensionSpacePoint;
 use Neos\ContentRepository\Core\Feature\Security\Exception\AccessDenied;
 use Neos\ContentRepository\Core\Projection\ContentGraph\Node;
 use Neos\ContentRepositoryRegistry\ContentRepositoryRegistry;
@@ -21,19 +23,22 @@ class NodeVariantsDataSource extends AbstractDataSource
     protected ContentRepositoryRegistry $contentRepositoryRegistry;
 
     /**
-     * Returns all occupied dimension space points for the given node's aggregate,
-     * so the frontend can offer switching to another dimension variant.
+     * Returns ALL dimension space points for the content repository, each annotated with its
+     * variant status relative to the given node's aggregate:
      *
-     * This can be removed when the `\Neos\Neos\Ui\Controller\BackendServiceController::getAdditionalNodeMetadataAction`
-     * provides the necessary metadata for the variants again in the UI.
+     *   - "occupied"    – the node aggregate has a direct variant in this DSP
+     *   - "shineThrough"– the node is visible here via dimension fallback (covered but not occupied)
+     *   - "missing"     – the node does not exist / is not visible in this DSP at all
      *
-     * Each entry is an associative array of dimension name => dimension value,
-     * e.g. ['language' => 'de']. In Neos 9 the dimension value IS the preset
-     * name, so this array can be passed directly to selectPreset() on the frontend.
+     * This allows the frontend to display the full picture and let editors jump to any DSP
+     * or create a new variant where one is missing.
+     *
+     * This can be removed when `\Neos\Neos\Ui\Controller\BackendServiceController::getAdditionalNodeMetadataAction`
+     * provides the necessary metadata again in the Neos 9 UI.
      *
      * @param Node|null $node The currently focused node
      * @param array<mixed> $arguments Additional arguments (unused)
-     * @return list<array<string,string>> One entry per occupied dimension space point
+     * @return list<array{coordinates: array<string,string>, status: string}> One entry per DSP
      * @throws AccessDenied
      */
     public function getData(?Node $node = null, array $arguments = []): array
@@ -50,9 +55,23 @@ class NodeVariantsDataSource extends AbstractDataSource
             return [];
         }
 
+        $allDimensionSpacePoints = $contentRepository->getVariationGraph()->getDimensionSpacePoints();
+
         $variants = [];
-        foreach ($nodeAggregate->occupiedDimensionSpacePoints as $occupiedDimensionSpacePoint) {
-            $variants[] = $occupiedDimensionSpacePoint->coordinates;
+        foreach ($allDimensionSpacePoints as $dimensionSpacePoint) {
+            $originDsp = OriginDimensionSpacePoint::fromDimensionSpacePoint($dimensionSpacePoint);
+            if ($nodeAggregate->occupiedDimensionSpacePoints->contains($originDsp)) {
+                $status = 'occupied';
+            } elseif ($nodeAggregate->coveredDimensionSpacePoints->contains($dimensionSpacePoint)) {
+                $status = 'shineThrough';
+            } else {
+                $status = 'missing';
+            }
+
+            $variants[] = [
+                'coordinates' => $dimensionSpacePoint->coordinates,
+                'status' => $status,
+            ];
         }
 
         return $variants;

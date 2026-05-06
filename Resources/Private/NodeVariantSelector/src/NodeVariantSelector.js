@@ -2,14 +2,25 @@ import React, {PureComponent} from 'react';
 import PropTypes from 'prop-types';
 import {connect} from 'react-redux';
 
-import {Icon, SelectBox} from '@neos-project/react-ui-components';
-
-import I18n from '@neos-project/neos-ui-i18n';
+// eslint-disable-next-line camelcase
+import {SelectBox, SelectBox_Option_MultiLineWithThumbnail} from '@neos-project/react-ui-components';
 
 import {actions, selectors} from '@neos-project/neos-ui-redux-store';
 import {neos} from '@neos-project/neos-ui-decorators';
 
 const DATA_SOURCE_IDENTIFIER = 'flowpack-nodevariantselector-variants';
+
+const STATUS_CONFIG = {
+    occupied:     {icon: 'check-circle',       color: '#00A4EB'},
+    shineThrough: {icon: 'exclamation-circle',  color: '#FF8700'},
+    missing:      {icon: 'times-circle',        color: '#CC0000'},
+};
+
+/** Returns a data URI for a small filled circle SVG in the given hex colour. */
+function statusImageUri(color) {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10" fill="${color}"/></svg>`;
+    return `data:image/svg+xml;utf8,${encodeURIComponent(svg)}`;
+}
 
 class NodeVariantSelector extends PureComponent {
     static propTypes = {
@@ -23,19 +34,12 @@ class NodeVariantSelector extends PureComponent {
         selectPreset: PropTypes.func.isRequired
     };
 
-    state = {
-        variants: null,
-        isLoading: false
-    };
+    state = {variants: null, isLoading: false};
 
-    componentDidMount() {
-        this.loadVariants();
-    }
+    componentDidMount() { this.loadVariants(); }
 
     componentDidUpdate(prevProps) {
-        const prevPath = prevProps.focusedNode?.contextPath;
-        const nextPath = this.props.focusedNode?.contextPath;
-        if (prevPath !== nextPath) {
+        if (prevProps.focusedNode?.contextPath !== this.props.focusedNode?.contextPath) {
             this.loadVariants();
         }
     }
@@ -46,14 +50,9 @@ class NodeVariantSelector extends PureComponent {
             this.setState({variants: null, isLoading: false});
             return;
         }
-
         this.setState({isLoading: true});
         dataSourcesDataLoader.resolveValue(
-            {
-                contextNodePath: focusedNode.contextPath,
-                dataSourceIdentifier: DATA_SOURCE_IDENTIFIER,
-                dataSourceDisableCaching: true
-            },
+            {contextNodePath: focusedNode.contextPath, dataSourceIdentifier: DATA_SOURCE_IDENTIFIER, dataSourceDisableCaching: true},
             null
         ).then(variants => {
             this.setState({variants: Array.isArray(variants) ? variants : null, isLoading: false});
@@ -62,62 +61,14 @@ class NodeVariantSelector extends PureComponent {
         });
     }
 
-    /**
-     * Build a dimension label row for the given dimension space point coordinates.
-     * @param {Object} coordinates  e.g. {language: 'de'}
-     * @param {boolean} isCurrent
-     */
-    renderDimensionLabel(coordinates, isCurrent) {
-        const {contentDimensions, i18nRegistry, focusedNode} = this.props;
-
-        return (
-            <div>
-                {isCurrent && (
-                    focusedNode.matchesCurrentDimensions ? (
-                        <Icon
-                            title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:matchingTooltip')}
-                            icon="check-circle"
-                            padded="right"
-                            color="primaryBlue"
-                        />
-                    ) : (
-                        <Icon
-                            title={i18nRegistry.translate('Flowpack.NodeVariantSelector:Main:shinethroughTooltip')}
-                            icon="exclamation-circle"
-                            padded="right"
-                            color="warn"
-                        />
-                    )
-                )}
-                {Object.keys(contentDimensions).map(dimensionName => {
-                    const dimensionConfig = contentDimensions[dimensionName];
-                    const dimensionValue = coordinates[dimensionName];
-                    const presetLabel = dimensionConfig?.presets?.[dimensionValue]?.label;
-                    return (
-                        <span key={dimensionName} style={{marginRight: 20, fontWeight: isCurrent ? 'bold' : 'normal'}}>
-                            <Icon
-                                title={i18nRegistry.translate(dimensionConfig.label)}
-                                icon={dimensionConfig.icon}
-                                padded="right"
-                            />
-                            <I18n id={presetLabel} />
-                        </span>
-                    );
-                })}
-            </div>
-        );
-    }
-
     render() {
-        const {activeDimensions, contentDimensions} = this.props;
+        const {activeDimensions, contentDimensions, i18nRegistry} = this.props;
         const {variants, isLoading} = this.state;
 
         if (isLoading || !variants || variants.length === 0) {
             return null;
         }
 
-        // Derive the currently active dimension space point from Redux state.
-        // activeDimensions has shape {language: ['de']} – take first value per dimension.
         const activeCoordinates = activeDimensions
             ? Object.keys(contentDimensions).reduce((acc, dimName) => {
                 const values = activeDimensions[dimName];
@@ -126,25 +77,40 @@ class NodeVariantSelector extends PureComponent {
             }, {})
             : null;
 
-        const options = variants.map(coordinates => {
-            const isCurrent = activeCoordinates
-                && Object.keys(activeCoordinates).every(
-                    dimName => activeCoordinates[dimName] === coordinates[dimName]
-                );
+        const isCurrentVariant = (coordinates) => activeCoordinates
+            && Object.keys(activeCoordinates).every(d => activeCoordinates[d] === coordinates[d]);
+
+        const dimensionLabel = (coordinates) =>
+            Object.keys(contentDimensions)
+                .map(dimName => {
+                    const preset = contentDimensions[dimName]?.presets?.[coordinates[dimName]];
+                    return preset?.label ?? coordinates[dimName] ?? dimName;
+                })
+                .join(' / ');
+
+        const statusOrder = {occupied: 0, shineThrough: 1, missing: 2};
+        const sortedVariants = [...variants].sort((a, b) => {
+            const ac = isCurrentVariant(a.coordinates), bc = isCurrentVariant(b.coordinates);
+            if (ac && !bc) return -1;
+            if (!ac && bc) return 1;
+            return (statusOrder[a.status] ?? 2) - (statusOrder[b.status] ?? 2);
+        });
+
+        const options = sortedVariants.map(variant => {
+            const isCurrent = !!isCurrentVariant(variant.coordinates);
+            const cfg = STATUS_CONFIG[variant.status] ?? STATUS_CONFIG.missing;
             return {
-                value: coordinates,
-                label: this.renderDimensionLabel(coordinates, !!isCurrent)
+                value: variant.coordinates,
+                label: dimensionLabel(variant.coordinates),
+                secondaryLabel: i18nRegistry.translate(`Flowpack.NodeVariantSelector:Main:status.${variant.status}`),
+                title: `${dimensionLabel(variant.coordinates)} – ${i18nRegistry.translate(`Flowpack.NodeVariantSelector:Main:tooltip.${variant.status}`)}`,
+                imageUri: statusImageUri(cfg.color),
+                icon: isCurrent ? cfg.icon : undefined,
             };
         });
 
-        // Put the current variant first
-        options.sort((a) => {
-            const aIsCurrent = activeCoordinates
-                && Object.keys(activeCoordinates).every(d => activeCoordinates[d] === a.value[d]);
-            return aIsCurrent ? -1 : 1;
-        });
-
-        const currentValue = options[0]?.value ?? null;
+        const currentVariant = variants.find(v => isCurrentVariant(v.coordinates));
+        const currentValue = currentVariant?.coordinates ?? options[0]?.value ?? null;
 
         return (
             <SelectBox
@@ -152,6 +118,7 @@ class NodeVariantSelector extends PureComponent {
                 options={options}
                 value={currentValue}
                 onValueChange={coordinates => this.props.selectPreset(coordinates)}
+                ListPreviewElement={SelectBox_Option_MultiLineWithThumbnail}
             />
         );
     }
@@ -163,9 +130,7 @@ const ConnectedNodeVariantSelector = connect(
         contentDimensions: state.cr.contentDimensions.byName,
         activeDimensions: state.cr.contentDimensions.active
     }),
-    {
-        selectPreset: actions.CR.ContentDimensions.selectPreset
-    }
+    {selectPreset: actions.CR.ContentDimensions.selectPreset}
 )(NodeVariantSelector);
 
 export default neos(globalRegistry => ({
