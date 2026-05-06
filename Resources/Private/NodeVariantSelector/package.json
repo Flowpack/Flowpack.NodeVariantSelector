@@ -7,7 +7,8 @@
         "watch": "node esbuild.js --watch"
     },
     "devDependencies": {
-        "@neos-project/neos-ui-extensibility": "~8.3.0",
-        "esbuild": "~0.17.0"
-    }
+        "@neos-project/neos-ui-extensibility": "^9.0.0",
+        "esbuild": "~0.28.0"
+    },
+    "packageManager": "yarn@4.14.1"
 }

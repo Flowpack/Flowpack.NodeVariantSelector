@@ -7,11 +7,13 @@ const options = {
     logLevel: "info",
     bundle: true,
     minify: !isWatch,
+    sourcemap: isWatch,
     target: "es2020",
     entryPoints: {"Plugin": "src/index.js"},
     loader: {
         ".js": "tsx",
     },
+    // Explicitly declare the React JSX factory so it is never inherited.
     alias: extensibilityMap,
     outdir: "../../Public/JavaScript/NodeVariantSelector",
 }
