@@ -1,0 +1,7 @@
+{
+  "version": 3,
+  "sources": ["esbuild-css-modules-plugin-ns-css:src/NodeVariantSelector.module.css"],
+  "sourcesContent": [".NodeVariantSelector-module__nvs-variant--shineThrough_TYi0dG__ {\n  background-image: repeating-linear-gradient(-45deg, #0000, #0000 12px, #323232 0 23px);\n  position: relative;\n}\n\n.NodeVariantSelector-module__nvs-variant--shineThrough_TYi0dG__:after {\n  content: \"\";\n  background-color: var(--colors-Warn);\n  width: 3px;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n\n.NodeVariantSelector-module__nvs-variant--missing_TYi0dG__ {\n  position: relative;\n  background-color: #323232 !important;\n}\n\n.NodeVariantSelector-module__nvs-variant--missing_TYi0dG__:after {\n  content: \"\";\n  background-color: var(--colors-Error);\n  width: 3px;\n  height: 100%;\n  position: absolute;\n  top: 0;\n  left: 0;\n}\n"],
+  "mappings": "AAAA,CAAC,+DACC,iBAAkB,0BAA0B,MAA1B,CAAkC,KAAlC,CAAyC,MAAM,IAA/C,CAAqD,QAAQ,EAAE,MACjF,SAAU,QACZ,CAEA,CALC,8DAK8D,OAC7D,QAAS,GACT,iBAAkB,IAAI,eACtB,MAAO,IACP,OAAQ,KACR,SAAU,SACV,IAAK,EACL,KAAM,CACR,CAEA,CAAC,0DACC,SAAU,SACV,iBAAkB,iBACpB,CAEA,CALC,yDAKyD,OACxD,QAAS,GACT,iBAAkB,IAAI,gBACtB,MAAO,IACP,OAAQ,KACR,SAAU,SACV,IAAK,EACL,KAAM,CACR",
+  "names": []
+}

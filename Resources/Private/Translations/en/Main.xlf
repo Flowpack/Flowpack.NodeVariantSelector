@@ -3,13 +3,25 @@
     <file original="" product-name="Flowpack.NodeVariantSelector" source-language="en" datatype="plaintext">
         <body>
             <trans-unit id="tooltip" xml:space="preserve">
-                <source>Use the dropdown to switch to other variants of the selected node</source>
+                <source>Use the dropdown to switch to other variants of the selected content</source>
             </trans-unit>
-            <trans-unit id="matchingTooltip" xml:space="preserve">
-                <source>The node dimensions of the selected node match the active dimension configuration, you may edit the node in place freely</source>
+            <trans-unit id="status.occupied" xml:space="preserve">
+                <source>Occupied</source>
             </trans-unit>
-            <trans-unit id="shinethroughTooltip" xml:space="preserve">
-                <source>The selected node is a shine-through node from another dimension, you may want to switch to its original dimension to edit it there, editing it in-place would create a copy</source>
+            <trans-unit id="status.shineThrough" xml:space="preserve">
+                <source>Shine-through</source>
+            </trans-unit>
+            <trans-unit id="status.missing" xml:space="preserve">
+                <source>Missing</source>
+            </trans-unit>
+            <trans-unit id="tooltip.occupied" xml:space="preserve">
+                <source>The dimensions of the selected content match the active dimension configuration, you may edit the content in place freely</source>
+            </trans-unit>
+            <trans-unit id="tooltip.shineThrough" xml:space="preserve">
+                <source>The selected content is a shine-through content from another dimension, you may want to switch to its original dimension to edit it there, editing it in-place would create a copy</source>
+            </trans-unit>
+            <trans-unit id="tooltip.missing" xml:space="preserve">
+                <source>No variant of the selected content exists in this dimension, you can create one by switching to it</source>
             </trans-unit>
         </body>
     </file>

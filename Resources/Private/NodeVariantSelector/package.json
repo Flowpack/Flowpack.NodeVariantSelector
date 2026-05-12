@@ -2,12 +2,20 @@
     "description": "NodeVariantSelector",
     "license": "MIT",
     "private": true,
+    "engines": {
+        "node": ">=22"
+    },
     "scripts": {
         "build": "node esbuild.js",
         "watch": "node esbuild.js --watch"
     },
     "devDependencies": {
-        "@neos-project/neos-ui-extensibility": "~8.3.0",
-        "esbuild": "~0.17.0"
-    }
+        "@neos-project/neos-ui-extensibility": "^9.0.0",
+        "@neos-project/react-ui-components": "^9.0.0",
+        "@types/react": "^16.14.69",
+        "@types/react-redux": "^7.1.0",
+        "esbuild": "~0.28.0",
+        "esbuild-css-modules-plugin": "^3.1.5"
+    },
+    "packageManager": "yarn@4.14.1"
 }
