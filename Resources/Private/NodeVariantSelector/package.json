@@ -14,7 +14,7 @@
         "@neos-project/react-ui-components": "^9.0.0",
         "@types/react": "^16.14.69",
         "@types/react-redux": "^7.1.0",
-        "esbuild": "~0.28.0",
+        "esbuild": "~0.28.1",
         "esbuild-css-modules-plugin": "^3.1.5"
     },
     "packageManager": "yarn@4.14.1"
