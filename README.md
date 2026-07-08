@@ -6,7 +6,8 @@ An experimental package containing an inspector view showing variants of a selec
 composer require flowpack/nodevariantselector
 ```
 
-![nv](https://user-images.githubusercontent.com/837032/53253099-83465480-36d1-11e9-88d4-70493a4eec07.gif)
+<img width="532" height="380" alt="image" src="https://github.com/user-attachments/assets/a444db54-ae14-4882-8f06-61fc9124067c" />
+
 
 ## Credits
 
